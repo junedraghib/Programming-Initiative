@@ -10,7 +10,7 @@ public class keypadcombination {
 //		Scanner s = new Scanner(System.in);
 //		String keypad = s.next();
 		
-		System.out.println(getKPC("145").size());
+		System.out.println(getKPC("145"));
 		
 	}
 	

@@ -7,7 +7,7 @@ public class MazePath {
 	private static final int ArrayList = 0;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		System.out.println(getMazePath(0, 0, 2, 2));
 
 	}
