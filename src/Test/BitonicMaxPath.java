@@ -36,6 +36,7 @@ public class BitonicMaxPath {
             
             int c1 = -1, c2 = -1;
             //detecting common point
+           
             int sum = 0;
             for (i = 0; i < n ;i++)
             {
@@ -73,18 +74,22 @@ public class BitonicMaxPath {
                             if(sum < sum11 + sum12)
                             {
                                 sum = sum11 + sum12;
+                                System.out.println("1112");
                             }
                             else if(sum < sum11 + sum22)
                             {
                                 sum = sum11 + sum22;
+                                System.out.println("1122");
                             }
                             else if(sum < sum21 + sum22)
                             {
                                 sum = sum21 + sum22;
+                                System.out.println("2122");
                             }
                             else if(sum < sum21 + sum12)
                             {
                                 sum = sum21 + sum12;
+                                System.out.println("2112");
                             }
                             
                             

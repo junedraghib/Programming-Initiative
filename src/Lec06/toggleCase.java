@@ -5,6 +5,7 @@ public class toggleCase {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder("ADghi");
+		System.out.println((char)(sb.charAt(1) - 1));
 		System.out.println(toggleCase(sb));
 	}
 	

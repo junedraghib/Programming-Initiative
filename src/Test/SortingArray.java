@@ -22,6 +22,7 @@ public class SortingArray {
         display(bubbleSort(arr));
         display(selectionSort(arr));
         display(insertionSort(arr));
+		
     }
     
     public static int[] insertionSort(int[] arr)
@@ -29,6 +30,7 @@ public class SortingArray {
         long start = System.currentTimeMillis();
     	
     	int n = arr.length;
+    	//Integer.va
         for (int i = 0; i < n ; i++ )
         {
             int key = arr[i];
@@ -136,6 +138,8 @@ public class SortingArray {
         }
         System.out.println();
     }
+    
+   
     
     
     
