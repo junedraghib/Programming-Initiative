@@ -1,5 +1,6 @@
 package Lec11;
 
+import java.time.Period;
 import java.util.Arrays;
 
 /**
@@ -11,8 +12,8 @@ public class EfficientComplexity {
 		// TODO Auto-generated method stub
 
 		// System.out.println(polynomial(5, 3));
-		//System.out.println(countSS("nitin"));
-		sieveofErathosthenes(10);
+		System.out.println(countSS("nitin"));
+//		sieveofErathosthenes(10);
 
 	}
 
@@ -83,14 +84,30 @@ public class EfficientComplexity {
 			}
 		}
 		
-		
+	}
+	
 		
 		public static int power(int x, int p)
 		{
-			int 
+			if (p == 0)
+			{
+				
+			}
+			int previous = power(x, p/2);
+			int pp = 1;
+			if (x % 2 == 0)
+			{
+				return previous * previous;
+			}
+			else
+			{
+				return x * previous * previous;
+			}
+			
+			
 		}
 		
-		
+	
 		
 		
 		
@@ -99,4 +116,4 @@ public class EfficientComplexity {
 		
 	}
 
-}
+
