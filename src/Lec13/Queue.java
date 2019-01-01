@@ -15,6 +15,12 @@ public class Queue {
 		this.front = 0;
 	}
 
+	public Queue(int cap) {
+		this.arr = new int[cap];
+		this.size = 0;
+		this.front = 0;
+	}
+
 	public int size() {
 		return this.size;
 	}
