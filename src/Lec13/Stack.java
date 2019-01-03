@@ -6,8 +6,8 @@ package Lec13;
 public class Stack {
 	// stack properties
 
-	private int tos;
-	private int[] arr;
+	protected int tos;
+	protected int[] arr;
 
 	// default constructor
 	public Stack() {

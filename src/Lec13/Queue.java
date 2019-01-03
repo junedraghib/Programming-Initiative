@@ -5,9 +5,9 @@ package Lec13;
  */
 public class Queue {
 
-	private int front;
-	private int size;
-	private int[] arr;
+	protected int front;
+	protected int size;
+	protected int[] arr;
 
 	public Queue() {
 		this.arr = new int[5];
