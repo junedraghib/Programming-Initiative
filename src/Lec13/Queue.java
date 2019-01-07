@@ -43,7 +43,7 @@ public class Queue {
 
 	public int dequeue() throws Exception {
 		if (this.isEmpty()) {
-			throw new Exception("Queue is Full");
+			throw new Exception("Queue is Empty");
 		}
 		int rv = this.arr[this.front];
 		this.size--;

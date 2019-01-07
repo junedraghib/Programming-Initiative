@@ -130,8 +130,8 @@ public class LinkList {
 
 			nm1.next = nn;
 			nn.next = n;
-			
-			size++ ;
+
+			size++;
 		}
 	}
 
@@ -192,6 +192,268 @@ public class LinkList {
 			this.size--;
 			return rv;
 		}
+	}
+
+	public void reverseDI() throws Exception {
+		int left = 0;
+		int right = this.size - 1;
+
+		while (left <= right) {
+			Node ln = this.getNodeAtIndex(left);
+			Node rn = this.getNodeAtIndex(right);
+
+			int temp = rn.data;
+			rn.data = ln.data;
+			ln.data = temp;
+
+			left++;
+			right--;
+		}
+	}
+
+	public void reversePI() {
+
+		Node prev = this.head;
+		Node curr = this.head.next;
+
+		while (curr != null) {
+			Node ahead = curr.next;
+			curr.next = prev;
+			prev = curr;
+			curr = ahead;
+		}
+
+		Node temp = this.head;
+		this.head = this.tail;
+		this.tail = temp;
+
+		this.tail.next = null;
+	}
+
+	private void reversePR(Node prev, Node curr) {
+
+		if (curr == null) {
+			return;
+		}
+
+		reversePR(curr, curr.next);
+		curr.next = prev;
+
+	}
+
+	public void reversePR() {
+		// client wouldn't have access to the head
+		reversePR(this.head, this.head.next);
+
+		Node temp = this.head;
+		this.head = this.tail;
+		this.tail = temp;
+
+		this.tail.next = null;
+
+	}
+
+	public void reverseDR() {
+
+		reverseDR(this.head, this.head.next, 0);
+
+	}
+
+	private Node reverseDR(Node left, Node right, int count) {
+		if (right == null) {
+			return left;
+		}
+
+		left = reverseDR(left, right.next, count + 1);
+		if (count >= this.size / 2) {
+			int temp = right.data;
+			right.data = left.data;
+			left.data = temp;
+		}
+
+		return left.next;
+
+	}
+
+	private class HeapMover {
+		Node left;
+	}
+
+	public void reverseDRheapMover() {
+		HeapMover mover = new HeapMover();
+		mover.left = this.head;
+		reverseDRHeapMover(mover, this.head.next, 0);
+	}
+
+	private void reverseDRHeapMover(HeapMover mover, Node right, int count) {
+		if (right == null) {
+			return;
+		}
+
+		reverseDRHeapMover(mover, right.next, count + 1);
+		if (count >= this.size / 2) {
+			int temp = right.data;
+			right.data = mover.left.data;
+			mover.left.data = temp;
+		}
+
+		mover.left = mover.left.next;
+
+	}
+
+	public void fold() throws Exception {
+		HeapMover mover = new HeapMover();
+		mover.left = this.head;
+		fold(mover, this.head.next, 0);
+		Node last = getNodeAtIndex(this.size - 1);
+		last.next = null;
+	}
+
+	private void fold(HeapMover mover, Node right, int count) {
+		if (right == null) {
+			return;
+		}
+
+//		if(count == (this.size / 2))
+//		{
+//			right.next = null;
+//		}
+
+//		if(count < this.size / 2)
+//		{
+//			return;
+//		}
+
+		fold(mover, right.next, count + 1);
+		Node temp = null;
+		if (count >= this.size / 2) {
+			temp = mover.left.next;
+			mover.left.next = right;
+			right.next = temp;
+		}
+
+		mover.left = temp;
+
+	}
+
+	public void middle() {
+		System.out.println(middleNode().data);
+	}
+
+	private Node middleNode() {
+
+		Node prev = this.head;
+		Node curr = this.head;
+
+		while (!(curr.next == null || curr.next.next == null)) {
+			prev = prev.next;
+			curr = curr.next.next;
+		}
+
+		return prev;
+
+	}
+
+	// kth node from last
+	public int kthfromlast(int k) {
+
+		Node slow = this.head;
+		Node fast = this.head;
+
+		for (int i = 0; i < k; i++) {
+			fast = fast.next;
+		}
+
+		while (fast != null) {
+			slow = slow.next;
+			fast = fast.next;
+		}
+
+		return slow.data;
+
+	}
+
+	public void kthreverse(int k) throws Exception {
+		LinkList prev = null;
+
+		while (this.size != 0) {
+			LinkList curr = new LinkList();
+
+			for (int i = 0; i < k; i++) {
+				curr.addAtFirst(this.removeFirst());
+			}
+
+			if (prev == null) {
+				prev = curr;
+			} else {
+				prev.tail.next = curr.head;
+				prev.size += curr.size;
+				prev.tail = curr.tail;
+			}
+
+		}
+
+		this.head = prev.head;
+		this.tail = prev.tail;
+		this.size = prev.size;
+
+	}
+
+	public void createDummy() {
+		Node n1 = new Node();
+		n1.data = 10;
+		Node n2 = new Node();
+		n2.data = 20;
+		Node n3 = new Node();
+		n3.data = 30;
+		Node n4 = new Node();
+		n4.data = 40;
+		Node n5 = new Node();
+		n5.data = 50;
+		Node n6 = new Node();
+		n6.data = 60;
+		Node n7 = new Node();
+		n7.data = 70;
+		Node n8 = new Node();
+		n8.data = 80;
+
+		n1.next = n2;
+		n2.next = n3;
+		n3.next = n4;
+		n4.next = n5;
+		n5.next = n6;
+		n6.next = n7;
+		n7.next = n8;
+		n8.next = n4;
+
+		this.head = n1;
+
+	}
+
+	public void detectRemoveLoop() {
+
+		Node slow = this.head;
+		Node fast = this.head;
+
+		while (fast != null && fast.next != null) {
+			fast = fast.next.next;
+			slow = slow.next;
+
+			if (slow == fast) {
+				break;
+			}
+		}
+
+		Node start = this.head;
+		Node loop = fast;
+
+		while (loop.next != fast.next) {
+			start = start.next;
+			loop = loop.next;
+		}
+
+		loop.next = null;
+
 	}
 
 }
