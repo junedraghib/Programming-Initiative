@@ -46,6 +46,7 @@ public class Queue {
 			throw new Exception("Queue is Empty");
 		}
 		int rv = this.arr[this.front];
+		this.arr[this.front] = 0;
 		this.size--;
 		this.front = (this.front + 1) % this.arr.length;
 		return rv;
@@ -60,10 +61,38 @@ public class Queue {
 	}
 
 	public void display() {
+		
+//		System.out.print("+");
+		for (int i = 0; i < this.arr.length; i++) {
+			if (i == this.front + this.size - 1) {
+				System.out.print("-r-");
+				
+			}
+			else {
+				System.out.print("---");
+			}
+		}
+//		System.out.print("+");
+		System.out.println();
+		
 		for (int i = 0; i < this.arr.length; i++) {
 			int rear = (i + this.front) % this.arr.length;
 			System.out.print(this.arr[rear] + " ");
 		}
+		
+//		System.out.print("+");
+		System.out.println();
+		for (int i = 0; i < this.arr.length; i++) {
+			if (i == this.front) {
+				System.out.print("f--");
+				
+			}
+			else {
+				System.out.print("---");
+			}
+		}
+		System.out.println();
+//		System.out.print("+");
 	}
 
 }

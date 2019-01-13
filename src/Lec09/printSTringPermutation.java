@@ -4,10 +4,10 @@ public class printSTringPermutation {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		// printPermutation("abc", "");
+		 printPermutation("cab", "");
 
 		// printPermutationLexicographically("aabc", "");
-		printUniquePermutation("aabc", "");
+//		printUniquePermutation("aabc", "");
 
 	}
 

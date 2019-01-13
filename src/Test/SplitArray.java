@@ -20,10 +20,33 @@ public class SplitArray {
 			i++;
 		}
 		
-		int count = count(arr, 0, sum1 / 2, new boolean[arr.length], 0);
-		System.out.println(count);
+		//int count = count(arr, 0, sum1 / 2, new boolean[arr.length], 0);
+//		split3(arr, 0, sum1 / 2, new boolean[n]);
+		split(arr, 0, 0, "", "", 0);
+//		System.out.println(count);
 
 	}
+	
+	public static void split(int[] arr, int sumgp1, int sumgp2, String gp1, String gp2, int vidx)
+    {
+        
+        if(vidx == arr.length )
+        {
+            if(sumgp1 == sumgp2)
+            {
+                System.out.println(gp1+" and "+gp2);
+                return;
+            }
+            else
+                return;
+        }
+        
+        
+        split(arr, sumgp1 + arr[vidx], sumgp2, gp1+arr[vidx]+" ", gp2, vidx + 1);
+        
+        split(arr, sumgp1, sumgp2  + arr[vidx], gp1, gp2+arr[vidx]+" ", vidx + 1);
+        
+    }
 
 	public static int split(int[] arr, int vidx, int target, int count, int sum) {
 		if (vidx == arr.length) {

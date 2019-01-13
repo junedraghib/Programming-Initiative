@@ -41,7 +41,6 @@ public class LinkList {
 		while (i < index) {
 			temp = temp.next;
 			i++;
-//			this.size++;
 		}
 
 		return temp.data;
@@ -53,7 +52,7 @@ public class LinkList {
 		}
 
 		Node temp = this.head;
-		System.out.println("------------");
+		System.out.println("------------------------------");
 
 		while (temp != null) {
 
@@ -61,7 +60,7 @@ public class LinkList {
 			temp = temp.next;
 		}
 		System.out.println();
-		System.out.println("------------");
+		System.out.println("------------------------------");
 	}
 
 	public void addAtLast(int data) throws Exception {
@@ -109,7 +108,6 @@ public class LinkList {
 		while (i < index) {
 			temp = temp.next;
 			i++;
-//			this.size++;
 		}
 
 		return temp;
@@ -177,7 +175,7 @@ public class LinkList {
 		}
 	}
 
-	public int removeAt(int index) throws Exception {
+	public int removeAtIndex(int index) throws Exception {
 		if (this.size == 0) {
 			throw new Exception("LL is Empty");
 		} else if (index == 0) {
@@ -194,6 +192,7 @@ public class LinkList {
 		}
 	}
 
+	// reverse data iteratively
 	public void reverseDI() throws Exception {
 		int left = 0;
 		int right = this.size - 1;
@@ -211,6 +210,7 @@ public class LinkList {
 		}
 	}
 
+	// reverse pointer iteratively
 	public void reversePI() {
 
 		Node prev = this.head;
@@ -230,6 +230,7 @@ public class LinkList {
 		this.tail.next = null;
 	}
 
+	// reverse pointer recursively helper function
 	private void reversePR(Node prev, Node curr) {
 
 		if (curr == null) {
@@ -241,6 +242,7 @@ public class LinkList {
 
 	}
 
+	// reverse pointer recursively
 	public void reversePR() {
 		// client wouldn't have access to the head
 		reversePR(this.head, this.head.next);
@@ -253,12 +255,20 @@ public class LinkList {
 
 	}
 
+	// reverse Data recursively helper function
 	public void reverseDR() {
 
 		reverseDR(this.head, this.head.next, 0);
 
 	}
 
+	/**
+	 * we have made this method as we need to have access to LinkList private
+	 * properties such as head and tail and at the same time we have to make this
+	 * function accessible to public client, this we will call it from another
+	 * public method while making sure, that a public client might not be having
+	 * access to private properties
+	 */
 	private Node reverseDR(Node left, Node right, int count) {
 		if (right == null) {
 			return left;
@@ -275,6 +285,18 @@ public class LinkList {
 
 	}
 
+	/**
+	 * HeapMover is a concept to make a particular data member global so that each
+	 * function frame could have access to that variable, at anytime, we might have
+	 * created that variable at class level or static but for other function we
+	 * might not be using this variable very frequently, thus later approach will
+	 * cause increased size for each instance for this class, thus better is to use
+	 * a HeapMover concept
+	 *
+	 * here we wanted to make variable left global so we have created a private
+	 * class heapmover here and left as a member of this class.
+	 *
+	 **/
 	private class HeapMover {
 		Node left;
 	}
@@ -314,16 +336,6 @@ public class LinkList {
 			return;
 		}
 
-//		if(count == (this.size / 2))
-//		{
-//			right.next = null;
-//		}
-
-//		if(count < this.size / 2)
-//		{
-//			return;
-//		}
-
 		fold(mover, right.next, count + 1);
 		Node temp = null;
 		if (count >= this.size / 2) {
@@ -360,10 +372,13 @@ public class LinkList {
 		Node slow = this.head;
 		Node fast = this.head;
 
+		// create a difference of k distance among slow and fast pointer
 		for (int i = 0; i < k; i++) {
 			fast = fast.next;
 		}
 
+		// when fast pointer reaches end of the LinkList slow reaches to (n - k)th node
+		// which is kth from last
 		while (fast != null) {
 			slow = slow.next;
 			fast = fast.next;
@@ -399,6 +414,70 @@ public class LinkList {
 
 	}
 
+	private LinkList mergerTwoSortedLinkList(LinkList second) throws Exception {
+		LinkList sorted = new LinkList();
+
+		Node fptr = this.head;
+		Node sptr = second.head;
+
+		while (fptr != null && sptr != null) {
+			if (fptr.data < sptr.data) {
+				sorted.addAtLast(fptr.data);
+				fptr = fptr.next;
+			} else {
+				sorted.addAtLast(sptr.data);
+				sptr = sptr.next;
+			}
+		}
+
+		if (fptr == null) {
+			while (sptr != null) {
+				sorted.addAtLast(sptr.data);
+				sptr = sptr.next;
+			}
+		}
+
+		if (sptr == null) {
+			while (fptr != null) {
+				sorted.addAtLast(fptr.data);
+				fptr = fptr.next;
+			}
+		}
+
+		return sorted;
+	}
+
+	public void mergeSort() throws Exception {
+		if (this.size == 1) {
+			return;
+		}
+
+		Node midn = this.middleNode();
+		Node midp1n = midn.next;
+
+		LinkList fh = new LinkList();
+		fh.head = this.head;
+		fh.tail = midn;
+		fh.size = (this.size + 1) / 2;
+		fh.tail.next = null;
+
+		LinkList sh = new LinkList();
+		sh.head = midp1n;
+		sh.tail = this.tail;
+		sh.size = (this.size) / 2;
+		sh.tail.next = null;
+
+		fh.mergeSort();
+		sh.mergeSort();
+
+		LinkList merged = fh.mergerTwoSortedLinkList(sh);
+
+		this.head = merged.head;
+		this.tail = merged.tail;
+		this.size = merged.size;
+
+	}
+
 	public void createDummy() {
 		Node n1 = new Node();
 		n1.data = 10;
@@ -427,6 +506,7 @@ public class LinkList {
 		n8.next = n4;
 
 		this.head = n1;
+		this.tail = null;
 
 	}
 
@@ -444,15 +524,23 @@ public class LinkList {
 			}
 		}
 
-		Node start = this.head;
-		Node loop = fast;
+		if (slow == fast) {
+			Node start = this.head;
+			Node loop = fast;
 
-		while (loop.next != fast.next) {
-			start = start.next;
-			loop = loop.next;
+			while (loop.next != start.next) {
+				start = start.next;
+				loop = loop.next;
+			}
+			
+			System.out.println("Loop Detected at "+loop.data+" and "+start.next.data);
+			loop.next = null;
+			System.out.println("Loop Removed!!");
 		}
-
-		loop.next = null;
+		else
+		{
+			System.out.println("No Loop Detected!!");
+		}
 
 	}
 

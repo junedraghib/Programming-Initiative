@@ -4,8 +4,8 @@ package Lec13;
  * created by : Juned Raghib created on : 29-Dec-2018
  */
 public class Stack {
+	
 	// stack properties
-
 	protected int tos;
 	protected int[] arr;
 
@@ -68,10 +68,28 @@ public class Stack {
 
 	public void display() throws Exception {
 		int i = this.tos;
+		
 		while (i >= 0) {
-			System.out.println(this.arr[i]);
+			System.out.print("---");
 			i--;
 		}
+		System.out.print("+");
+		System.out.println();
+		
+		i = this.tos;
+		
+		while (i >= 0) {
+			System.out.print(this.arr[i]+" ");
+			i--;
+		}
+		System.out.print("|");
+		System.out.println();
+		i = this.tos;
+		while (i >= 0) {
+			System.out.print("---");
+			i--;
+		}
+		System.out.print("+");
 	}
 
 }
