@@ -31,19 +31,19 @@ public class Chess2 {
 			return 0;
 		}
 
-		if (portsmines[sr * (er + 1) + (sc + 1)] == 1) {
+		if (portsmines[sr * (ec + 1) + (sc + 1)] == 1) {
 			return 0;
 		}
 
 		int count = 0;
 
+		if (portsmines[sr * (ec + 1) + (sc + 1)] == 2) {
+			count += chess(er, er, ec, ec, ans + "{" + sr + "-" + sc + "}P", portsmines);
+		}
+
 		// as knight
 		count += chess(sr + 2, er, sc + 1, ec, ans + "{" + sr + "-" + sc + "}K", portsmines);
 		count += chess(sr + 1, er, sc + 2, ec, ans + "{" + sr + "-" + sc + "}K", portsmines);
-
-		if (portsmines[sr * (er + 1) + (sc + 1)] == 2) {
-			count += chess(er, er, ec, ec, ans + "{" + sr + "-" + sc + "}P", portsmines);
-		}
 
 		if (sr == 0 || sr == er || sc == 0 || sc == ec) {
 

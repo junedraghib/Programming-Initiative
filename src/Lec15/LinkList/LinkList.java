@@ -495,7 +495,6 @@ public class LinkList {
 		n7.data = 70;
 		Node n8 = new Node();
 		n8.data = 80;
-
 		n1.next = n2;
 		n2.next = n3;
 		n3.next = n4;

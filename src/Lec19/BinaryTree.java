@@ -1,5 +1,11 @@
 package Lec19;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 /**
@@ -26,6 +32,55 @@ public class BinaryTree {
 		s = new Scanner(str);
 		this.root = construct(null, true);
 	}
+
+	public BinaryTree(int[] pre, int[] in) {
+		this.root = construct(pre, 0, pre.length - 1, in, 0, in.length - 1);
+	}
+
+	private Node construct(int[] pre, int plo, int phi, int[] in, int inlo, int inhi) {
+		if (plo > phi || inlo > inhi) {
+			return null;
+		}
+
+		Node nn = new Node();
+		nn.data = pre[plo];
+
+		int searchindex = -1;
+		for (int i = inlo; i <= inhi; i++) {
+			if (in[i] == pre[plo]) {
+				searchindex = i;
+				break;
+			}
+		}
+
+		int numberofelement = searchindex - inlo;
+		nn.left = construct(pre, plo + 1, plo + numberofelement, in, inlo, searchindex - 1);
+		nn.right = construct(pre, plo + numberofelement + 1, phi, in, searchindex + 1, inhi);
+		return nn;
+	}
+
+//	private Node constructpostin(int[] post, int plo, int phi, int[] in, int inlo, int inhi)
+//	{
+//		if (plo > phi || inlo > inhi) {
+//			return null;
+//		}
+//		
+//		Node nn = new Node();
+//		nn.data = post[plo];
+//		
+//		int searchindex = -1;
+//		for (int i = inlo; i <= inhi; i++) {
+//			if (in[i] == post[phi]) {
+//				searchindex = i;
+//				break;
+//			}
+//		}
+//		
+//		int numberofelement = inhi - searchindex;
+//		nn.left = construct(post, plo + 1, plo + numberofelement, in, inlo, searchindex - 1);
+//		nn.right = construct(post,plo + numberofelement + 1, phi, in,searchindex + 1, inhi);
+//		return nn;
+//	}
 
 	private Node construct(Node parent, boolean isLeft) {
 
@@ -183,6 +238,21 @@ public class BinaryTree {
 		preorder(node.right);
 	}
 
+	public void inorder() {
+		inorder(this.root);
+	}
+
+	private void inorder(Node node) {
+
+		if (node == null) {
+			return;
+		}
+
+		inorder(node.left);
+		System.out.print(node.data + " ");
+		inorder(node.right);
+	}
+
 	public void postorder() {
 		postorder(this.root);
 	}
@@ -281,6 +351,153 @@ public class BinaryTree {
 		np.height = Math.max(lp.height, rp.height) + 1;
 
 		return np;
+	}
+
+	// date 19 jan 2k19
+
+	private class Pair1 {
+		Node node;
+		boolean sd;
+		boolean ld;
+		boolean rd;
+	}
+
+	public void preorderI() {
+		LinkedList<Pair1> stack = new LinkedList<>();
+
+		Pair1 sp = new Pair1();
+		sp.node = this.root;
+
+		stack.addFirst(sp);
+
+		while (!stack.isEmpty()) {
+
+			Pair1 tp = stack.getFirst();
+
+			if (tp.node == null) {
+				stack.removeFirst();
+				continue;
+			}
+
+			if (!tp.sd) {
+				System.out.print(tp.node.data + " ");
+				tp.sd = true;
+			} else if (!tp.ld) {
+				Pair1 np = new Pair1();
+				np.node = tp.node.left;
+				if (np.node != null) {
+					stack.addFirst(np);
+				}
+				tp.ld = true;
+			} else if (!tp.rd) {
+				Pair1 np = new Pair1();
+				np.node = tp.node.right;
+				if (np.node != null) {
+					stack.addFirst(np);
+				}
+				tp.rd = true;
+			} else {
+				stack.removeFirst();
+			}
+
+		}
+
+	}
+
+	private class BSTPair {
+		boolean isBST;
+		int max = Integer.MIN_VALUE;
+		int min = Integer.MAX_VALUE;
+	}
+
+	public boolean isBST() {
+		return isBST(this.root).isBST;
+	}
+
+	private BSTPair isBST(Node node) {
+
+		if (node == null) {
+			BSTPair np = new BSTPair();
+			np.isBST = true;
+			return np;
+		}
+
+		BSTPair lp = isBST(node.left);
+		BSTPair rp = isBST(node.right);
+
+		BSTPair sp = new BSTPair();
+		sp.min = Math.min(Math.min(lp.min, rp.min), node.data);
+		sp.max = Math.max(Math.max(lp.max, rp.max), node.data);
+
+		if (lp.max < node.data && rp.min > node.data && lp.isBST && rp.isBST) {
+			sp.isBST = true;
+		} else {
+			sp.isBST = false;
+		}
+
+		return sp;
+	}
+
+	// vertical order using hashmap
+	private class HorizontalComparator implements Comparator<VOPair> {
+
+		@Override
+		public int compare(VOPair o1, VOPair o2) {
+			return o1.hlevel - o2.hlevel;
+		}
+
+	}
+
+	public void printVerticalOrder() {
+		HashMap<Integer, ArrayList<VOPair>> map = new HashMap<>();
+		printVerticalOrder(this.root, map, 0, 0);
+
+		ArrayList<Integer> keys = new ArrayList<>(map.keySet());
+		
+		
+		Collections.sort(keys);
+		
+		for (Integer key : keys) {
+			ArrayList<VOPair> list = new ArrayList<>(map.get(key));
+			Collections.sort(list, new HorizontalComparator());
+			
+			System.out.println(key + " " + list);
+
+		}
+		
+	}
+
+	private class VOPair {
+		Node node;
+		int vlevel;
+		int hlevel;
+
+		@Override
+		public String toString() {
+			return this.node.data + "";
+		}
+	}
+
+	private void printVerticalOrder(Node node, HashMap<Integer, ArrayList<VOPair>> map, int hl, int vl) {
+
+		if (node == null) {
+			return;
+		}
+
+		VOPair np = new VOPair();
+		np.node = node;
+		np.vlevel = vl;
+		np.hlevel = hl;
+
+		if (!map.containsKey(vl)) {
+			map.put(vl, new ArrayList<>());
+		}
+
+		map.get(vl).add(np);
+
+		printVerticalOrder(node.left, map, hl + 1, vl - 1);
+		printVerticalOrder(node.right, map, hl + 1, vl + 1);
+
 	}
 
 }
