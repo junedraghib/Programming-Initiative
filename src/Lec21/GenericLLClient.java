@@ -1,5 +1,7 @@
 package Lec21;
 
+import java.util.LinkedList;
+
 public class GenericLLClient {
 
 	public static void main(String[] args) throws Exception {
@@ -17,7 +19,8 @@ public class GenericLLClient {
 		ll.addAtFirst(cars[2]);
 		ll.addAtFirst(cars[3]);
 		ll.display();
-
+		LinkedList<Integer> list = new LinkedList<>();
+		
 	}
 
 }

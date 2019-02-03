@@ -35,7 +35,11 @@ public class GenericTreeClient {
 //		System.out.println();
 //		gt.printAtLevel(2);
 		
-		gt.multiSolver(20);
+//		gt.multiSolver(20);
+		
+//		gt.levelorderNLNull();
+		System.out.println();
+		gt.levelorderNL();
 	}
 
 }

@@ -1,5 +1,7 @@
 package Lec23;
 
+import java.util.LinkedList;
+
 public class DynamicProgrammingDemo {
 	public static void main(String[] args) {
 //		System.out.println(fibTD(0, new int[7]));
@@ -14,11 +16,15 @@ public class DynamicProgrammingDemo {
 ////		System.out.println(mazePathTD(0, 0, 100, 100, new int[100 + 1][100 + 1]));
 ////		System.out.println(mazePathBU(0, 0, 100, 100));
 //		System.out.println(mazePathBU(0, 0, 100, 100));
-		int[] coins = {1, 2, 3};
-		System.out.println(coinChange(4, coins, ""));
-		
+//		int[] coins = {1, 2, 3};
+//		System.out.println(coinChange(4, coins, ""));
+
 //		System.out.println(LCS("abcd", "agcfd"));
 //		System.out.println(LCSBU("abcd", "agcfd"));
+
+//		System.out.println(editdistanceBU("abcd", "agcfd"));
+		int[] arr = {1,2,3,4,5};
+		System.out.println(MCM(arr, 0, arr.length - 1));
 	}
 
 	// fib in O(n) using recursion
@@ -225,7 +231,7 @@ public class DynamicProgrammingDemo {
 			System.out.println(ans);
 			return 1;
 		}
-		
+
 		if (n < 0) {
 			return 0;
 		}
@@ -283,6 +289,145 @@ public class DynamicProgrammingDemo {
 		}
 		return strg[0][0];
 
+	}
+
+	// LCS using TDDP
+
+//	public static int LCSTD()
+
+	// Edit distance
+	// using recurssion
+
+	public static int editdistance(String s1, String s2) {
+
+		if (s1.length() == 0 || s2.length() == 0) {
+			return Math.max(s1.length(), s2.length());
+		}
+
+		char ch1 = s1.charAt(0);
+		char ch2 = s2.charAt(0);
+
+		String ros1 = s1.substring(1);
+		String ros2 = s2.substring(1);
+
+		int ans = 0;
+		if (ch1 == ch2) {
+			ans = editdistance(ros1, ros2);
+		} else {
+
+			int insert = editdistance(ros1, s2);
+			int delete = editdistance(s1, ros2);
+			int replace = editdistance(ros1, ros2);
+
+			ans = Math.min(insert, Math.min(delete, replace)) + 1;
+		}
+
+		return ans;
+
+	}
+
+	// using BUDP approach
+	public static int editdistanceBU(String s1, String s2) {
+		int[][] strg = new int[s1.length() + 1][s2.length() + 1];
+
+		for (int row = s1.length(); row >= 0; row--) {
+			for (int col = s2.length(); col >= 0; col--) {
+				if (row == s1.length()) {
+					strg[row][col] = s2.length() - col;
+					continue;
+				}
+
+				if (col == s2.length()) {
+					strg[row][col] = s1.length() - row;
+					continue;
+				}
+
+				if (s1.charAt(row) == s2.charAt(col)) {
+					strg[row][col] = strg[row + 1][col + 1];
+				} else {
+					int insert = strg[row + 1][col];
+					int delete = strg[row][col + 1];
+					int replace = strg[row + 1][col + 1];
+
+					strg[row][col] = Math.min(insert, Math.min(delete, replace)) + 1;
+				}
+
+			}
+		}
+		return strg[0][0];
+	}
+
+	// Matrix Chain Multiplication
+	// using recursion
+
+	public static int MCM(int[] arr, int si, int ei) {
+		
+		if(si + 1 == ei) {
+			return 0;
+		}
+		
+		
+		int min = Integer.MAX_VALUE;
+		for (int i = si + 1; i <= ei - 1; i++) {
+
+			int fc = MCM(arr, si, i);
+			int sc = MCM(arr, i, ei);
+
+			int sw = arr[si] * arr[i] * arr[ei];
+
+			int total = fc + sc + sw;
+			if (total < min) {
+				min = total;
+			}
+
+		}
+
+		return min;
+
+	}
+	
+	
+	//using TD DP approach
+	
+	public static int MCMTD(int[] arr, int si, int ei, int[][] strg) {
+		
+		if(si + 1 == ei) {
+			return 0;
+		}
+		
+		int min = Integer.MAX_VALUE;
+		
+		if(strg[si][ei] != 0) {
+			return strg[si][ei];
+		}
+		
+		for (int i = si + 1; i <= ei - 1; i++) {
+
+			int fc = MCMTD(arr, si, i, strg);
+			int sc = MCMTD(arr, i, ei, strg);
+
+			int sw = arr[si] * arr[i] * arr[ei];
+
+			int total = fc + sc + sw;
+			if (total < min) {
+				min = total;
+			}
+			
+		}
+		strg[si][ei] = min;
+		return min;
+
+	}
+	
+	public static int MCMBU(int[] arr) {
+		int[][] strg = new int[arr.length][arr.length];
+		
+		for(int si = arr.length - 1; si >= 0; si--) {
+			for(int ei = arr.length - 1; ei >= 0; ei--) {
+				
+				
+			}
+		}
 	}
 
 }

@@ -77,11 +77,10 @@ public class GenericTree {
 
 	private void postorder(Node node) {
 
-		System.out.print(node.data + " ");
-
-		for (int i = node.children.size() - 1; i >= 0; i--) {
+		for (int i = 0; i < node.children.size(); i++) {
 			postorder(node.children.get(i));
 		}
+		System.out.print(node.data + " ");
 
 	}
 
@@ -114,6 +113,7 @@ public class GenericTree {
 	}
 
 	// using null
+	
 
 	// using primary and helper queue
 	public void levelorderNL() {
@@ -307,9 +307,9 @@ public class GenericTree {
 		System.out.println("Max : " + mover.max);
 		System.out.println("Height : " + mover.height);
 		System.out.println("IsPresent : " + mover.ispresent);
-		System.out.println("Predecessor : "+(mover.predicessor == null?null:mover.predicessor.data));
-		System.out.println("Successor : "+(mover.successor == null?null:mover.successor.data));
-		System.out.println("JustGreater : "+mover.justgreater.data);
+		System.out.println("Predecessor : " + (mover.predicessor == null ? null : mover.predicessor.data));
+		System.out.println("Successor : " + (mover.successor == null ? null : mover.successor.data));
+		System.out.println("JustGreater : " + mover.justgreater.data);
 	}
 
 	private void multiSolver(HeapMover mover, int item, int level, Node node) {
@@ -323,23 +323,23 @@ public class GenericTree {
 		if (mover.ispresent == true && mover.successor == null) {
 			mover.successor = node;
 		}
-		
+
 		if (node.data == item) {
 			mover.ispresent = true;
 		}
-		
+
 		if (mover.ispresent == false) {
 			mover.predicessor = node;
 		}
-		
+
 		if (node.data > item) {
 //			mover.justgreater = node;
-			
+
 			if (mover.justgreater == null || node.data < mover.justgreater.data) {
 				mover.justgreater = node;
 			}
 		}
-		
+
 		if (level > mover.height) {
 			mover.height = level;
 		}
@@ -349,7 +349,5 @@ public class GenericTree {
 		}
 
 	}
-
-
 
 }

@@ -1,5 +1,7 @@
 package Lec15.LinkList;
 
+import java.util.LinkedList;
+
 /**
  * created by : Juned Raghib created on : 02-Jan-2019
  */
@@ -14,6 +16,11 @@ public class LinkList {
 	private Node tail;
 	private int size;
 
+	public boolean isEmpty()
+	{
+		return this.size == 0;
+	}
+	
 	public int getFirst() throws Exception {
 		if (this.size == 0) {
 			throw new Exception("LL is Empty!!");
@@ -542,5 +549,43 @@ public class LinkList {
 		}
 
 	}
+	
+	public void add(LinkList l) throws Exception{
+	    LinkList ll = add(this, l);
+	    
+	    if(ll.getFirst() == 0){
+	        ll.removeFirst();
+	        ll.display();
+	    } else {
+	        ll.display();
+	    }
+	}
+	
+	private LinkList add(LinkList l1, LinkList l2) throws Exception{
+	    
+	    if(l1.isEmpty() && l2.isEmpty()){
+	        LinkList br = new LinkList();
+	        br.addAtFirst(0);
+	        return br;
+	    }
+	    
+	    int val1 = l1.removeLast();
+	    int val2 = l2.removeLast();
+	    
+	    LinkList rll = add(l1, l2);
+	    
+	    int carry0 = rll.removeFirst();
+	    
+	    int sum = (val1 + val2 + carry0) % 10;
+	    int carry1 = (val1 + val2 + carry0) / 10;
+	    
+	    rll.addAtFirst(sum);
+	    rll.addAtFirst(carry1);
+	    
+	    return rll;
+	    
+	}
+	
+	
 
 }

@@ -1,129 +1,134 @@
-package Test;
+class Queue {
 
-import java.util.Scanner;
-import Lec13.Queue;
-import Lec13.Stack;
-import Lec14.QueueReverse;
-import Lec15.DynamicQueue;
-import Lec15.DynamicStack;
+	protected int size;
 
-/**
- * created by : Juned Raghib created on : 02-Jan-2019
- */
-public class HoodiesatCB {
+	protected int front;
+	protected int[] data;
+
+	public Queue() {
+		this.size = 0;
+		this.front = 0;
+		this.data = new int[5];
+	}
+
+	public Queue(int cap) {
+		this.size = 0;
+		this.front = 0;
+		this.data = new int[cap];
+	}
+
+	public int size() {
+		return size;
+	}
+
+	public boolean isEmpty() {
+		return (size == 0);
+	}
+
+	public void enqueue(int item) throws Exception {
+		if (this.size() == this.data.length) {
+			int[] oa = this.data;
+			int[] na = new int[oa.length * 2];
+			for (int i = 0; i < this.size(); i++) {
+				int idx = (i + front) % oa.length;
+				na[i] = oa[idx];
+			}
+
+			this.data = na;
+			this.front = 0;
+		}
+
+		// if (this.size == this.data.length) {
+		// throw new Exception("queue is full");
+		// }
+
+		this.data[(front + size) % this.data.length] = item;
+		size++;
+
+	}
+
+	public int dequeue() throws Exception {
+		if (this.size == 0) {
+			throw new Exception("queue is empty");
+
+		}
+
+		int rv = this.data[front];
+		front = (front + 1) % this.data.length;
+		size--;
+
+		return rv;
+
+	}
+
+	public int getFront() throws Exception {
+		if (this.size == 0) {
+			throw new Exception("queue is empty");
+		}
+
+		int rv = this.data[front];
+
+		return rv;
+	}
+
+	public void display() {
+		System.out.println();
+		for (int i = 0; i < size; i++) {
+			int idx = (i + front) % this.data.length;
+			System.out.print(this.data[idx] + " ");
+		}
+        System.out.print("END");
+	}
 
 	static Scanner scn = new Scanner(System.in);
+    public static void hoodies(int q) throws Exception{ 
+	    Queue pqueue = new Queue(100000);
+	    Queue c1 = new Queue(50000);
+	    Queue c2 = new Queue(50000);
+	    Queue c3 = new Queue(50000);
+	    Queue c4 = new Queue(50000);
+	   // Scanner s = new Scanner(System.in);
+	    while(q > 0){
+	        char ch = scn.next().charAt(0);
+	        if(ch == 'E'){
+	            int x = scn.nextInt();
+	            int y = scn.nextInt();
+	            if(x == 1){
+	                c1.enqueue(y);
+	            } else if(x == 2){
+	                c2.enqueue(y);
+	            } else if(x== 3){
+	                c3.enqueue(y);
+	            } else {
+	                c4.enqueue(y);
+	            }
+	            
+	            pqueue.enqueue(x);
+	            
+	        } else if(ch == 'D') {
+	            int front = pqueue.dequeue();
+	            if(front == 1){
+	                System.out.println(front+" "+c1.dequeue());
+	            } else if(front == 2){
+	                System.out.println(front+" "+c2.dequeue());
+	            } else if(front == 3){
+	                System.out.println(front+" "+c3.dequeue());
+	            } else if(front == 4){
+	                System.out.println(front+" "+c4.dequeue());
+	            }
+	        }
+	    }
+
+
+	
+} 
+
 
 	public static void main(String[] args) throws Exception {
-		int q = scn.nextInt();
-		hoodies(q);
 
-	}
-
-	public static void hoodies(int q) throws Exception {
-
-		Queue course = new Queue(q);
-		Queue rollno = new Queue(q);
-//		course.enqueue(1);
-//		rollno.enqueue(1);
-//		course.enqueue(3);
-//		rollno.enqueue(1);
-//		course.enqueue(1);
-//		rollno.enqueue(3);
-//		course.enqueue(2);
-//		rollno.enqueue(2);
-//		course.enqueue(3);
-//		rollno.enqueue(2);
-//		course.enqueue(1);
-//		rollno.enqueue(4);
-//		course.enqueue(2);
-//		rollno.enqueue(5);
-//		course.enqueue(3);
-//		rollno.enqueue(3);
-
-		while (q > 0) {
-			char op = scn.next().charAt(0);
-			if (op == 'E') {
-				int x = scn.nextInt();
-				int y = scn.nextInt();
-
-				if (course.isEmpty() && rollno.isEmpty()) {
-					course.enqueue(x);
-					rollno.enqueue(y);
-				} else {
-					oppE(course, rollno, x, y);
-				}
-
-			} else if (op == 'D') {
-				System.out.println(course.dequeue() + " " + rollno.dequeue());
-			}
-
-			q--;
-		}
-
-	}
-
-	public static void oppE(Queue course, Queue rollno, int c, int r) throws Exception {
-
-//		System.out.println();
-//		course.display();
-//		System.out.println();
-//		rollno.display();
-		
-
-		boolean flag = false;
-
-		java.util.Stack<Integer> coursestack = new java.util.Stack<>();
-		java.util.Stack<Integer> rollnostack = new java.util.Stack<>();
-		
-		while (!course.isEmpty() && !rollno.isEmpty()) {
-
-			int curcou = course.getFront();
-			int currol = rollno.getFront();
-
-			if (c == curcou && !flag) {
-				coursestack.push(c);
-				rollnostack.push(r);
-				flag = true;
-			}
-
-			coursestack.push(curcou);
-			rollnostack.push(currol);
-		}coursestack.push(curcou);
-		rollnostack.push(currol);
-		coursestack.push(c);
-		rollnostack.push(r);
-
-		while (!coursestack.isEmpty() && !rollnostack.isEmpty()) {
-			course.enqueue(coursestack.pop());
-			rollno.enqueue(rollnostack.pop());
-		}
-		
-		QueueReverse.queueActualReverese(course);
-		QueueReverse.queueActualReverese(rollno);
-		
+        int n = scn.nextInt();
+        
+        hoodies(n);
 	}
 
 }
-
-
-//18
-//E 1 1
-//E 3 1 
-//E 1 3
-//E 2 2 
-//E 3 2 
-//E 1 4
-//E 2 5
-//E 3 3
-//E 1 5
-//D
-//D
-//D
-//D
-//D
-//D
-//D
-//D
-//D
-

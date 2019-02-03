@@ -168,7 +168,6 @@ public class BinaryTree {
 		}
 
 		int tm = node.data;
-
 		int lm = max(node.left);
 		tm = Math.max(tm, lm);
 		int rm = max(node.right);
@@ -497,7 +496,32 @@ public class BinaryTree {
 
 		printVerticalOrder(node.left, map, hl + 1, vl - 1);
 		printVerticalOrder(node.right, map, hl + 1, vl + 1);
-
+		
 	}
-
+	
+	public int LCA(int a, int b){
+	    return LCA(this.root, a, b).data;
+	}
+	
+	private Node LCA(Node node, int a, int b){
+	    if(node == null){
+	        return null;
+	    }
+	    
+	    if(node.data == a || node.data == b){
+	        return node;
+	    }
+	    
+	    Node lnode = LCA(node.left, a, b);
+	    Node rnode = LCA(node.right, a, b);
+	    
+	    //if lnode and rnode return something then
+	    //
+	    if(lnode != null && rnode != null){
+	        return node;
+	    }
+	    
+	    return (lnode != null)?lnode:rnode;
+	}
+	
 }
