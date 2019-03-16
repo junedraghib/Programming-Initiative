@@ -21,7 +21,7 @@ public class printAsciiSS {
 		
 		printSS(roq, ans);
 		printSS(roq, ans + ch);
-		printSS(roq, ans + (int)ch);
+//		printSS(roq, ans + (int)ch);
 	}
 
 }

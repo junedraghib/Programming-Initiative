@@ -1,6 +1,8 @@
 package Lec24_Graph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class Graph {
 	private class Vertex {
@@ -125,4 +127,373 @@ public class Graph {
 
 		return false;
 	}
+
+	// BFS : Breath First Search returns shortest path between source and
+	// destination
+
+	private class PairBFS {
+		String name;
+		String psfr;
+		String color;
+	}
+
+	public boolean BFS(String src, String dest) {
+
+		LinkedList<PairBFS> queue = new LinkedList<>();
+		HashMap<String, Boolean> processed = new HashMap<>();
+
+		// make a new pair
+		PairBFS np = new PairBFS();
+		np.name = src;
+		np.psfr = src;
+
+		queue.addLast(np);
+
+		while (!queue.isEmpty()) {
+			PairBFS rp = queue.removeFirst();
+
+			if (processed.containsKey(rp.name)) {
+				continue;
+			}
+
+			processed.put(rp.name, true);
+
+			// direct
+			if (containsEdge(rp.name, dest)) {
+				return true;
+			}
+
+			for (String nbr : this.vtces.get(rp.name).nbrs.keySet()) {
+
+				if (!processed.containsKey(nbr)) {
+					PairBFS nnp = new PairBFS();
+					nnp.name = nbr;
+					nnp.psfr = rp.psfr + nbr;
+					queue.addLast(nnp);
+				}
+
+			}
+		}
+
+		return false;
+
+	}
+
+	public boolean DFS(String src, String dest) {
+
+		LinkedList<PairBFS> stack = new LinkedList<>();
+		HashMap<String, Boolean> processed = new HashMap<>();
+
+		// make a new pair
+		PairBFS np = new PairBFS();
+		np.name = src;
+		np.psfr = src;
+
+		stack.addFirst(np);
+
+		while (!stack.isEmpty()) {
+			PairBFS rp = stack.removeFirst();
+			if (processed.containsKey(rp.name)) {
+				continue;
+			}
+			processed.put(rp.name, true);
+
+			// direct
+			if (containsEdge(rp.name, dest)) {
+				return true;
+			}
+
+			for (String nbr : this.vtces.get(rp.name).nbrs.keySet()) {
+
+				if (!processed.containsKey(nbr)) {
+					PairBFS nnp = new PairBFS();
+					nnp.name = nbr;
+					nnp.psfr = rp.psfr + nbr;
+					stack.addFirst(nnp);
+				}
+
+			}
+		}
+
+		return false;
+
+	}
+
+	public void BFT() {
+
+		LinkedList<PairBFS> queue = new LinkedList<>();
+		HashMap<String, Boolean> processed = new HashMap<>();
+
+		// make a new pair
+		for (String vtx : this.vtces.keySet()) {
+
+			if (processed.containsKey(vtx)) {
+				continue;
+			}
+
+			PairBFS np = new PairBFS();
+			np.name = vtx;
+			np.psfr = vtx;
+
+			queue.addLast(np);
+
+			while (!queue.isEmpty()) {
+				PairBFS rp = queue.removeFirst();
+
+				if (processed.containsKey(rp.name)) {
+					continue;
+				}
+
+				processed.put(rp.name, true);
+
+				System.out.println(rp.name + " via " + rp.psfr);
+
+				for (String nbr : this.vtces.get(rp.name).nbrs.keySet()) {
+
+					if (!processed.containsKey(nbr)) {
+						PairBFS nnp = new PairBFS();
+						nnp.name = nbr;
+						nnp.psfr = rp.psfr + nbr;
+						queue.addLast(nnp);
+					}
+
+				}
+			}
+		}
+
+	}
+
+	public void DFT() {
+
+		LinkedList<PairBFS> stack = new LinkedList<>();
+		HashMap<String, Boolean> processed = new HashMap<>();
+
+		// make a new pair
+		for (String vtx : this.vtces.keySet()) {
+
+			if (processed.containsKey(vtx)) {
+				continue;
+			}
+
+			PairBFS np = new PairBFS();
+			np.name = vtx;
+			np.psfr = vtx;
+
+			stack.addFirst(np);
+
+			while (!stack.isEmpty()) {
+				PairBFS rp = stack.removeFirst();
+
+				if (processed.containsKey(rp.name)) {
+					continue;
+				}
+
+				processed.put(rp.name, true);
+
+				System.out.println(rp.name + " via " + rp.psfr);
+
+				for (String nbr : this.vtces.get(rp.name).nbrs.keySet()) {
+
+					if (!processed.containsKey(nbr)) {
+						PairBFS nnp = new PairBFS();
+						nnp.name = nbr;
+						nnp.psfr = rp.psfr + nbr;
+						stack.addFirst(nnp);
+					}
+
+				}
+			}
+		}
+
+	}
+
+	public boolean isConnected() {
+
+		int flag = 0;
+
+		LinkedList<PairBFS> queue = new LinkedList<>();
+		HashMap<String, Boolean> processed = new HashMap<>();
+
+		// make a new pair
+		for (String vtx : this.vtces.keySet()) {
+
+			if (processed.containsKey(vtx)) {
+				continue;
+			}
+
+			flag++;
+
+			PairBFS np = new PairBFS();
+			np.name = vtx;
+			np.psfr = vtx;
+
+			queue.addLast(np);
+
+			while (!queue.isEmpty()) {
+				PairBFS rp = queue.removeFirst();
+
+				if (processed.containsKey(rp.name)) {
+					continue;
+				}
+
+				processed.put(rp.name, true);
+
+				for (String nbr : this.vtces.get(rp.name).nbrs.keySet()) {
+
+					if (!processed.containsKey(nbr)) {
+						PairBFS nnp = new PairBFS();
+						nnp.name = nbr;
+						nnp.psfr = rp.psfr + nbr;
+						queue.addLast(nnp);
+					}
+
+				}
+			}
+		}
+
+		return flag == 1;
+
+	}
+
+	public boolean isCyclic() {
+
+		LinkedList<PairBFS> queue = new LinkedList<>();
+		HashMap<String, Boolean> processed = new HashMap<>();
+
+		// make a new pair
+		for (String vtx : this.vtces.keySet()) {
+
+			if (processed.containsKey(vtx)) {
+				return true;
+			}
+
+			PairBFS np = new PairBFS();
+			np.name = vtx;
+			np.psfr = vtx;
+
+			queue.addLast(np);
+
+			while (!queue.isEmpty()) {
+				PairBFS rp = queue.removeFirst();
+
+				if (processed.containsKey(rp.name)) {
+					return true;
+				}
+
+				processed.put(rp.name, true);
+
+				for (String nbr : this.vtces.get(rp.name).nbrs.keySet()) {
+
+					if (!processed.containsKey(nbr)) {
+						PairBFS nnp = new PairBFS();
+						nnp.name = nbr;
+						nnp.psfr = rp.psfr + nbr;
+						queue.addLast(nnp);
+					}
+
+				}
+			}
+		}
+
+		return false;
+
+	}
+
+	public boolean isTree() {
+		return isConnected() && !isCyclic();
+	}
+
+	public ArrayList<ArrayList<String>> getCC() {
+
+		LinkedList<PairBFS> queue = new LinkedList<>();
+		HashMap<String, Boolean> processed = new HashMap<>();
+		ArrayList<ArrayList<String>> ans = new ArrayList<>();
+		// make a new pair
+		for (String vtx : this.vtces.keySet()) {
+
+			if (processed.containsKey(vtx)) {
+				continue;
+			}
+
+			PairBFS np = new PairBFS();
+			np.name = vtx;
+			np.psfr = vtx;
+
+			queue.addLast(np);
+			ArrayList<String> component = new ArrayList<>();
+			while (!queue.isEmpty()) {
+				PairBFS rp = queue.removeFirst();
+
+				if (processed.containsKey(rp.name)) {
+					continue;
+				}
+				component.add(rp.name);
+				processed.put(rp.name, true);
+
+				for (String nbr : this.vtces.get(rp.name).nbrs.keySet()) {
+
+					if (!processed.containsKey(nbr)) {
+						PairBFS nnp = new PairBFS();
+						nnp.name = nbr;
+						nnp.psfr = rp.psfr + nbr;
+						queue.addLast(nnp);
+					}
+
+				}
+			}
+			ans.add(component);
+		}
+		return ans;
+	}
+	
+	public boolean isBipartite() {
+
+		LinkedList<PairBFS> queue = new LinkedList<>();
+		HashMap<String, String> processed = new HashMap<>();
+
+		// make a new pair
+		for (String vtx : this.vtces.keySet()) {
+
+			if (processed.containsKey(vtx)) {
+				continue;
+			}
+
+			PairBFS np = new PairBFS();
+			np.name = vtx;
+			np.psfr = vtx;
+			np.color = "r";
+
+			queue.addLast(np);
+
+			while (!queue.isEmpty()) {
+				PairBFS rp = queue.removeFirst();
+
+				if (processed.containsKey(rp.name)) {
+					String oc = processed.get(rp.name);
+					String nc = rp.color;
+					
+					if(!oc.equals(nc)) {
+						return false;
+					}
+				}
+				
+				
+				processed.put(rp.name, rp.color);
+
+				for (String nbr : this.vtces.get(rp.name).nbrs.keySet()) {
+
+					if (!processed.containsKey(nbr)) {
+						PairBFS nnp = new PairBFS();
+						nnp.name = nbr;
+						nnp.psfr = rp.psfr + nbr;
+						nnp.color = (processed.get(rp.name) == "r")? "g" : "r";
+						queue.addLast(nnp);
+					}
+
+				}
+			}
+		}
+		return true;
+	}
+
 }

@@ -23,8 +23,16 @@ public class DynamicProgrammingDemo {
 //		System.out.println(LCSBU("abcd", "agcfd"));
 
 //		System.out.println(editdistanceBU("abcd", "agcfd"));
-		int[] arr = {1,2,3,4,5};
-		System.out.println(MCM(arr, 0, arr.length - 1));
+//		int[] arr = { 2, 3, 5, 1, 4 };
+////		System.out.println(MCM(arr, 0, arr.length - 1));
+//		System.out.println(sellwine(arr, 0, arr.length - 1, 1));
+//		System.out.println(sellwineTD(arr, 0, arr.length - 1, 1, new int[arr.length][arr.length]));
+//		System.out.println(sellwineBU(arr));
+		int[] weight = {1, 3, 4, 5};
+		int[] price = {1, 4, 5, 7};
+		int cap = 7;
+		System.out.println(knapsack(weight, price, cap, 0, new int[weight.length][cap + 1]));
+		
 	}
 
 	// fib in O(n) using recursion
@@ -361,12 +369,11 @@ public class DynamicProgrammingDemo {
 	// using recursion
 
 	public static int MCM(int[] arr, int si, int ei) {
-		
-		if(si + 1 == ei) {
+
+		if (si + 1 == ei) {
 			return 0;
 		}
-		
-		
+
 		int min = Integer.MAX_VALUE;
 		for (int i = si + 1; i <= ei - 1; i++) {
 
@@ -385,22 +392,21 @@ public class DynamicProgrammingDemo {
 		return min;
 
 	}
-	
-	
-	//using TD DP approach
-	
+
+	// using TD DP approach
+
 	public static int MCMTD(int[] arr, int si, int ei, int[][] strg) {
-		
-		if(si + 1 == ei) {
+
+		if (si + 1 == ei) {
 			return 0;
 		}
-		
+
 		int min = Integer.MAX_VALUE;
-		
-		if(strg[si][ei] != 0) {
+
+		if (strg[si][ei] != 0) {
 			return strg[si][ei];
 		}
-		
+
 		for (int i = si + 1; i <= ei - 1; i++) {
 
 			int fc = MCMTD(arr, si, i, strg);
@@ -412,22 +418,97 @@ public class DynamicProgrammingDemo {
 			if (total < min) {
 				min = total;
 			}
-			
+
 		}
 		strg[si][ei] = min;
 		return min;
 
 	}
-	
-	public static int MCMBU(int[] arr) {
+
+	// using BU DP
+
+	// wine problem using recursion
+	public static int sellwine(int[] arr, int si, int ei, int yr) {
+
+		if (si == ei) {
+			return arr[si] * yr;
+		}
+
+		int sellS = sellwine(arr, si + 1, ei, yr + 1) + arr[si] * yr;
+		int sellL = sellwine(arr, si, ei - 1, yr + 1) + arr[ei] * yr;
+
+		return Math.max(sellS, sellL);
+
+	}
+
+	// using TD
+	public static int sellwineTD(int[] arr, int si, int ei, int yr, int[][] strg) {
+
+		if (si == ei) {
+			return arr[si] * yr;
+		}
+
+		if (strg[si][ei] != 0) {
+			return strg[si][ei];
+		}
+
+		int sellS = sellwineTD(arr, si + 1, ei, yr + 1, strg) + arr[si] * yr;
+		int sellL = sellwineTD(arr, si, ei - 1, yr + 1, strg) + arr[ei] * yr;
+		int ans = Math.max(sellS, sellL);
+		strg[si][ei] = ans;
+		return ans;
+
+	}
+
+	// using BU
+
+	public static int sellwineBU(int[] arr) {
+
 		int[][] strg = new int[arr.length][arr.length];
-		
-		for(int si = arr.length - 1; si >= 0; si--) {
-			for(int ei = arr.length - 1; ei >= 0; ei--) {
-				
-				
+
+		for (int slide = 0; slide <= arr.length - 1; slide++) {
+			for (int si = 0; si < arr.length - slide; si++) {
+				int ei = si + slide;
+
+				int yr = arr.length - ei + si;
+
+				if (si == ei) {
+					strg[si][ei] = arr[si] * yr;
+				} else {
+
+					int sc = strg[si + 1][ei] + arr[si] * yr;
+					int lc = strg[si][ei - 1] + arr[ei] * yr;
+
+					strg[si][ei] = Math.max(sc, lc);
+				}
 			}
 		}
+
+		return strg[0][4];
+
+	}
+
+	// 1 \ 0knapsack : return max profit using min weight
+	public static int knapsack(int[] weight, int[] price, int cap, int vidx, int[][] strg) {
+
+		if (vidx == weight.length) {
+			return 0;
+		}
+
+		if (strg[vidx][cap] != 0) {
+			return strg[vidx][cap];
+		}
+
+		int profitex = knapsack(weight, price, cap, vidx + 1, strg);
+		int profitin = 0;
+		if (cap >= weight[vidx]) {
+			profitin = knapsack(weight, price, cap - weight[vidx], vidx + 1, strg) + price[vidx];
+		}
+		int ans = Math.max(profitex, profitin);
+		strg[vidx][cap] = ans;
+
+		return ans;
+
 	}
 
 }
